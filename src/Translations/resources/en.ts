@@ -1,5 +1,5 @@
 export default {
-  welcome: 'Welcome to React Native Poke by TheCodingMachine',
+  welcome: 'Welcome to Poke by Phu Nguyen',
   actions: {
     continue: 'Continue',
   },

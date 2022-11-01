@@ -1,16 +1,20 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { ExampleContainer } from '@/Containers'
+import { HomeContainer } from '@/Containers'
 
 const Tab = createBottomTabNavigator()
 
 // @refresh reset
 const MainNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Tab.Screen
         name="Home"
-        component={ExampleContainer}
+        component={HomeContainer}
         options={{
           tabBarIconStyle: { display: 'none' },
           tabBarLabelPosition: 'beside-icon',
