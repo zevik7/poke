@@ -2,7 +2,11 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { HomeContainer } from '@/Containers'
 
-const Tab = createBottomTabNavigator()
+const Tab = createBottomTabNavigator<TabStackParamList>()
+
+export type TabStackParamList = {
+  Home: undefined
+}
 
 // @refresh reset
 const MainNavigator = () => {

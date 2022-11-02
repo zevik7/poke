@@ -2,12 +2,18 @@ import React from 'react'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
-import { StartupContainer } from '@/Containers'
+import { PokeDetailContainer, StartupContainer } from '@/Containers'
 import { useTheme } from '@/Hooks'
 import MainNavigator from './Main'
 import { navigationRef } from './utils'
 
-const Stack = createStackNavigator()
+const Stack = createStackNavigator<RootStackParamList>()
+
+export type RootStackParamList = {
+  Startup: undefined
+  Main: undefined
+  PokeDetail: { name: string }
+}
 
 // @refresh reset
 const ApplicationNavigator = () => {
@@ -18,15 +24,32 @@ const ApplicationNavigator = () => {
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
         <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Startup" component={StartupContainer} />
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Startup"
+            component={StartupContainer}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Main"
             component={MainNavigator}
-            options={{
-              animationEnabled: false,
-            }}
+            options={{ headerShown: false }}
           />
+          <Stack.Group
+            screenOptions={{
+              presentation: 'modal',
+            }}
+          >
+            <Stack.Screen
+              name="PokeDetail"
+              component={PokeDetailContainer}
+              options={{
+                headerShown: true,
+                headerTitle: 'Information',
+                headerTitleAlign: 'center',
+              }}
+            />
+          </Stack.Group>
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>

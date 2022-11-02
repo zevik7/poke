@@ -8,11 +8,7 @@ import {
   CommonActions,
   createNavigationContainerRef,
 } from '@react-navigation/native'
-
-type RootStackParamList = {
-  Startup: undefined
-  Home: undefined
-}
+import { RootStackParamList } from './Application'
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>()
 

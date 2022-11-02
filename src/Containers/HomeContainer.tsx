@@ -10,17 +10,35 @@ import {
 import { Icon } from '@rneui/themed'
 import { useFetchAllQuery } from '@/Services/modules/pokes'
 import { Poke, PokeDetail } from '@/Models/pokes'
-import BallHeaderImage from '@/Assets/Images/Pokeball_header.png'
 import { PokeItem } from '@/Components'
 
-const HomeContainer = () => {
-  const { data, isLoading, isFetching } = useFetchAllQuery({})
-  const [searchText, setSearchText] = useState<string>('')
+const BallHeaderImage = require('@/Assets/Images/Pokeball_header.png')
 
-  const renderItem = useCallback(
-    ({ item }: { item: Poke }) => <PokeItem name={item.name} />,
-    [],
-  )
+const HomeContainer = () => {
+  const [searchText, setSearchText] = useState<string>('')
+  const { data, isLoading, isFetching } = useFetchAllQuery({})
+  const [searchLoading, setSearchLoading] = useState(false)
+  const [pokes, setPokes] = useState([])
+
+  useEffect(() => {
+    setSearchLoading(true)
+    const timer = setTimeout(() => {
+      if (searchText && data?.results) {
+        setPokes(
+          data?.results.filter((item: Poke) => item.name.includes(searchText)),
+        )
+      } else {
+        setPokes(data?.results)
+      }
+      setSearchLoading(false)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [searchText, data])
+
+  const renderItem = useCallback(({ item }: { item: Poke }) => {
+    return <PokeItem name={item.name} />
+  }, [])
 
   return (
     <View className="px-4 h-full flex-col bg-white">
@@ -38,14 +56,17 @@ const HomeContainer = () => {
         />
       </View>
       <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" animating={isLoading || isFetching} />
-        {data?.results && (
-          <FlatList
-            data={data.results}
-            renderItem={renderItem}
-            className="w-full"
-          />
-        )}
+        {((isLoading || isFetching || searchLoading) && (
+          <ActivityIndicator size="large" />
+        )) ||
+          (pokes && pokes.length !== 0 ? (
+            <FlatList
+              keyExtractor={(item: Poke) => item.name}
+              data={pokes}
+              renderItem={renderItem}
+              className="w-full"
+            />
+          ) : null)}
       </View>
     </View>
   )
