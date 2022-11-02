@@ -11,4 +11,4 @@ export const pokeApi = api.injectEndpoints({
   overrideExisting: false,
 })
 
-export const { useLazyFetchOneQuery } = pokeApi
+export const { useFetchOneQuery, useFetchAllQuery } = pokeApi
