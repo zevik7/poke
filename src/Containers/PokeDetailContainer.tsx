@@ -14,6 +14,7 @@ import { capitalizeFirstLetter, typeColors } from '@/Components/PokeItem'
 import { Chip, Divider } from '@rneui/themed'
 import { Ability, PokeType, Stat } from '@/Models/pokes'
 import * as Progress from 'react-native-progress'
+import { useTranslation } from 'react-i18next'
 
 const BallHeaderImage = require('@/Assets/Images/Pokeball_header.png')
 
@@ -24,6 +25,7 @@ export default function PokeDetailContainer() {
     params: { name },
   } = useRoute<PokeDetailRouteProps>()
   const { data, isLoading, isFetching } = useFetchOneQuery(name)
+  const { t } = useTranslation()
 
   if (isLoading || isFetching) {
     return (
@@ -78,16 +80,22 @@ export default function PokeDetailContainer() {
             color: mainColor,
           }}
         >
-          Poke Data
+          {t('information.poke_data.title')}
         </Text>
-        <Text className="text-base">Height: {data?.height}</Text>
-        <Text className="text-base">Weight: {data?.weight}</Text>
         <Text className="text-base">
-          Base Experience: {data?.base_experience}
+          {t('information.poke_data.height')}: {data?.height}
+        </Text>
+        <Text className="text-base">
+          {t('information.poke_data.weight')}: {data?.weight}
+        </Text>
+        <Text className="text-base">
+          {t('information.poke_data.base_experience')}: {data?.base_experience}
         </Text>
 
         <View className="flex-row items-center">
-          <Text className="text-base mr-4">Abilities: </Text>
+          <Text className="text-base mr-4">
+            {t('information.poke_data.abilities')}:
+          </Text>
           {data.abilities.map((ability: Ability) => (
             <View key={ability.slot} className="mr-2">
               <Chip title={ability.ability.name} radius={4} color={mainColor} />
@@ -102,14 +110,18 @@ export default function PokeDetailContainer() {
               color: mainColor,
             }}
           >
-            Stats
+            {t('information.poke_stats.title')}
           </Text>
           {data.stats.map((stat: Stat, index: number) => (
             <View
               key={index}
               className="flex-row items-center justify-between gap-3 mb-2"
             >
-              <Text>{capitalizeFirstLetter(stat.stat.name)}</Text>
+              <Text>
+                {capitalizeFirstLetter(
+                  t(`information.poke_stats.${stat.stat.name}`),
+                )}
+              </Text>
               <Progress.Bar
                 progress={stat.base_stat / 100}
                 width={200}
