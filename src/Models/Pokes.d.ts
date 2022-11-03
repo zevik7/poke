@@ -4,7 +4,7 @@ export type Poke = {
 }
 
 export type PokeDetail = {
-  abilities: []
+  abilities: Ability[]
   base_experience: number
   forms: []
   game_indices: []
@@ -19,7 +19,7 @@ export type PokeDetail = {
   past_types: []
   species: {}
   sprites: {}
-  stats: []
+  stats: Stat[]
   types: PokeType[]
   weight: number
 }
@@ -27,4 +27,22 @@ export type PokeDetail = {
 export type PokeType = {
   slot: number
   type: { name: string; url: string }
+}
+
+export type Ability = {
+  ability: {
+    name: string
+    url: string
+  }
+  is_hidden: boolean
+  slot: number
+}
+
+export type Stat = {
+  base_stat: number
+  effort: number
+  stat: {
+    name: string
+    url: string
+  }
 }

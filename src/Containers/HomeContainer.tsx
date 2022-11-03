@@ -21,19 +21,18 @@ const HomeContainer = () => {
   const [pokes, setPokes] = useState([])
 
   useEffect(() => {
-    setSearchLoading(true)
-    const timer = setTimeout(() => {
-      if (searchText && data?.results) {
+    if (searchText && data?.results) {
+      setSearchLoading(true)
+      const timer = setTimeout(() => {
         setPokes(
           data?.results.filter((item: Poke) => item.name.includes(searchText)),
         )
-      } else {
-        setPokes(data?.results)
-      }
-      setSearchLoading(false)
-    }, 500)
-
-    return () => clearTimeout(timer)
+        setSearchLoading(false)
+      }, 500)
+      return () => clearTimeout(timer)
+    } else if (data?.results) {
+      setPokes(data?.results)
+    }
   }, [searchText, data])
 
   const renderItem = useCallback(({ item }: { item: Poke }) => {
@@ -58,15 +57,19 @@ const HomeContainer = () => {
       <View className="flex-1 items-center justify-center">
         {((isLoading || isFetching || searchLoading) && (
           <ActivityIndicator size="large" />
-        )) ||
-          (pokes && pokes.length !== 0 ? (
-            <FlatList
-              keyExtractor={(item: Poke) => item.name}
-              data={pokes}
-              renderItem={renderItem}
-              className="w-full"
-            />
-          ) : null)}
+        )) || (
+          <FlatList
+            keyExtractor={(item: Poke) => item.name}
+            data={pokes}
+            renderItem={renderItem}
+            className="w-full"
+            removeClippedSubviews={true}
+            initialNumToRender={2}
+            maxToRenderPerBatch={1}
+            updateCellsBatchingPeriod={100}
+            windowSize={7}
+          />
+        )}
       </View>
     </View>
   )

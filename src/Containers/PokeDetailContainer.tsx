@@ -12,7 +12,8 @@ import { useFetchOneQuery } from '@/Services/modules/pokes'
 import { SvgUri } from 'react-native-svg'
 import { capitalizeFirstLetter, typeColors } from '@/Components/PokeItem'
 import { Chip, Divider } from '@rneui/themed'
-import { PokeType } from '@/Models/pokes'
+import { Ability, PokeType, Stat } from '@/Models/pokes'
+import * as Progress from 'react-native-progress'
 
 const BallHeaderImage = require('@/Assets/Images/Pokeball_header.png')
 
@@ -40,7 +41,7 @@ export default function PokeDetailContainer() {
       {/* Header */}
       <ImageBackground
         source={BallHeaderImage}
-        className={`flex-row py-6 gap-4 items-center justify-center bg-[${mainColor}]`}
+        className={'flex-row py-6 gap-4 items-center justify-center'}
       >
         <SvgUri
           width={120}
@@ -67,13 +68,56 @@ export default function PokeDetailContainer() {
         <Divider style={styles.divider} />
       </View>
       {/* Information */}
-      <View className="p-10 flex-col gap-4 justify-between">
-        <Text className={'text-2xl text-blue-400'}>Poke Data</Text>
-        <Text className="text-lg">Height: {data?.height}</Text>
-        <Text className="text-lg">Weight: {data?.weight}</Text>
-        <Text className="text-lg">
+      <View className="relative p-10 flex-col gap-3 justify-between flex-1 justify-start">
+        <View
+          style={[styles.inforBackground, { backgroundColor: mainColor }]}
+        />
+        <Text
+          className="text-lg"
+          style={{
+            color: mainColor,
+          }}
+        >
+          Poke Data
+        </Text>
+        <Text className="text-base">Height: {data?.height}</Text>
+        <Text className="text-base">Weight: {data?.weight}</Text>
+        <Text className="text-base">
           Base Experience: {data?.base_experience}
         </Text>
+
+        <View className="flex-row items-center">
+          <Text className="text-base mr-4">Abilities: </Text>
+          {data.abilities.map((ability: Ability) => (
+            <View key={ability.slot} className="mr-2">
+              <Chip title={ability.ability.name} radius={4} color={mainColor} />
+            </View>
+          ))}
+        </View>
+
+        <View>
+          <Text
+            className="text-lg"
+            style={{
+              color: mainColor,
+            }}
+          >
+            Stats
+          </Text>
+          {data.stats.map((stat: Stat, index: number) => (
+            <View
+              key={index}
+              className="flex-row items-center justify-between gap-3 mb-2"
+            >
+              <Text>{capitalizeFirstLetter(stat.stat.name)}</Text>
+              <Progress.Bar
+                progress={stat.base_stat / 100}
+                width={200}
+                color={mainColor}
+              />
+            </View>
+          ))}
+        </View>
       </View>
       <View />
     </View>
@@ -88,5 +132,13 @@ const styles = StyleSheet.create({
   },
   divider: {
     width: '80%',
+  },
+  inforBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    opacity: 0.1,
   },
 })
