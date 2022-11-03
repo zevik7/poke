@@ -25,7 +25,9 @@ const HomeContainer = () => {
       setSearchLoading(true)
       const timer = setTimeout(() => {
         setPokes(
-          data?.results.filter((item: Poke) => item.name.includes(searchText)),
+          data?.results.filter((item: Poke) =>
+            item.name.includes(searchText.toLowerCase()),
+          ),
         )
         setSearchLoading(false)
       }, 500)
