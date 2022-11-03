@@ -21,20 +21,20 @@ const HomeContainer = () => {
   const [pokes, setPokes] = useState([])
 
   useEffect(() => {
-    if (searchText && data?.results) {
-      setSearchLoading(true)
-      const timer = setTimeout(() => {
+    setSearchLoading(true)
+    const timer = setTimeout(() => {
+      if (searchText && data?.results) {
         setPokes(
           data?.results.filter((item: Poke) =>
             item.name.includes(searchText.toLowerCase()),
           ),
         )
-        setSearchLoading(false)
-      }, 500)
-      return () => clearTimeout(timer)
-    } else if (data?.results) {
-      setPokes(data?.results)
-    }
+      } else {
+        setPokes(data?.results)
+      }
+      setSearchLoading(false)
+    }, 500)
+    return () => clearTimeout(timer)
   }, [searchText, data])
 
   const renderItem = useCallback(({ item }: { item: Poke }) => {
