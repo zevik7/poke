@@ -9,8 +9,6 @@ export default function LangSelect() {
     i18n.changeLanguage(value)
   }
 
-  console.log(i18n.language)
-
   return (
     <RNPickerSelect
       onValueChange={handleChangeLang}
@@ -19,7 +17,7 @@ export default function LangSelect() {
         { label: 'Vietnamese', value: 'vi' },
       ]}
       placeholder={{}}
-      value={'en'}
+      value={i18n.language}
     />
   )
 }
